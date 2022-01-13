@@ -18,14 +18,13 @@ public class ConfigHandler {
     public static void setup(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
+
         FgtXRay.distIndex = config.get(Configuration.CATEGORY_GENERAL, "searchdist", 0).getInt(); // Get our search distance.
 
-        for (String category : config.getCategoryNames()) // Iterate through each category in our config file.
-        {
+        for (String category : config.getCategoryNames()) {
             ConfigCategory cat = config.getCategory(category);
 
-            if (category.startsWith("oredict.")) // Dont iterate over the base category and make sure were on the oredict category.
-            {
+            if (category.startsWith("oredict.")) {
                 String dictName = cat.get("dictname").getString();
                 String guiName = cat.get("guiname").getString();
                 int id = cat.get("id").getInt();
@@ -34,7 +33,6 @@ public class ConfigHandler {
                 boolean enabled = cat.get("enabled").getBoolean(false);
 
                 FgtXRay.oredictOres.put(dictName, new OreInfo(guiName, id, meta, color, enabled));
-
             }
             else if (category.startsWith("customores.")) {
                 String name = cat.get("name").getString();
@@ -53,7 +51,6 @@ public class ConfigHandler {
         config.load();
         String formattedname = FORMAT_NAME_PTN.matcher(oreName).replaceAll(Matcher.quoteReplacement("")).toLowerCase();
 
-        // check if entry exists
         for (String category : config.getCategoryNames()) {
             if (category.startsWith("customores.")) {
                 if (config.get("customores." + formattedname, "name", "").getString() == formattedname) {
@@ -80,7 +77,7 @@ public class ConfigHandler {
         config.save();
     }
 
-    public static void replace(String oldName, OreInfo ore){
+    public static void replace(String oldName, OreInfo ore) {
 
     }
 

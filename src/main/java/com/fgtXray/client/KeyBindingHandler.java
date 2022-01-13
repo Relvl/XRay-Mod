@@ -13,18 +13,26 @@ public class KeyBindingHandler {
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
-        if ((!FMLClientHandler.instance().isGUIOpen(GuiChat.class)) && (mc.currentScreen == null) && (mc.theWorld != null)) {
-            if (OresSearch.searchList.isEmpty()) // Populate the OresSearch.searchList
-            {
-                OresSearch.get();
-            }
-            if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_toggleXray].isPressed()) {
-                FgtXRay.drawOres = !FgtXRay.drawOres;
-                RenderTick.ores.clear();
-            }
-            else if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_showXrayMenu].isPressed()) {
-                mc.displayGuiScreen(new GuiSettings());
-            }
+        if (FMLClientHandler.instance().isGUIOpen(GuiChat.class)) {
+            return;
+        }
+        if (mc.currentScreen != null || mc.theWorld == null) {
+            return;
+        }
+
+        if (OresSearch.searchList.isEmpty()) {
+            OresSearch.fillDictionary();
+        }
+
+        if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_toggleXray].isPressed()) {
+            FgtXRay.drawOres = !FgtXRay.drawOres;
+            RenderTick.ores.clear();
+            return;
+        }
+
+        if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_showXrayMenu].isPressed()) {
+            mc.displayGuiScreen(new GuiSettings());
+            return;
         }
     }
 }

@@ -27,9 +27,11 @@ repositories {
 }
 
 apply plugin: 'forge'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 version = "1.0.9"
-group = "com.fgtXray.fgtXray" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.fgtXray.fgtXray"
 archivesBaseName = "xray-1.7.10"
 
 minecraft {
