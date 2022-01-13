@@ -1,17 +1,21 @@
-package com.fgtXray.client.gui;
+package io.github.relvl.schematicaadvancement.client.gui;
+
+import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.fgtXray.Ident;
-import com.fgtXray.config.ConfigHandler;
-import com.fgtXray.reference.BlockInfo;
+import io.github.relvl.schematicaadvancement.reference.Ident;
+import io.github.relvl.schematicaadvancement.config.ConfigHandler;
+import io.github.relvl.schematicaadvancement.reference.BlockInfo;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiNewOre extends GuiScreen {
+public class GuiScreenBlockEdit extends GuiScreen {
+    private static final String IDENT_PLACEHOLDER = "ID:META";
+
     private GuiTextField oreName;
     private GuiTextField oreIdent;
 
@@ -27,25 +31,27 @@ public class GuiNewOre extends GuiScreen {
     private String initialOreIdent = "";
     private int initialOreColor = 0;
 
-    public GuiNewOre() {
+    public GuiScreenBlockEdit() {
+        this.initialOreIdent = IDENT_PLACEHOLDER;
         this.initialOreName = "Name of block";
-        this.initialOreIdent = "ID:META";
         this.initialOreColor = 0x00FF00;
     }
 
-    public GuiNewOre(BlockInfo ore) {
-        this.initialOreName = ore.name;
+    public GuiScreenBlockEdit(BlockInfo ore) {
         this.initialOreIdent = ore.getIdent().getIdentPair();
+        this.initialOreName = ore.name;
         this.initialOreColor = ore.color;
     }
 
     @Override
     public void initGui() {
-        buttonList.add(addButton = new GuiButton(98, width / 2 + 5, height / 2 + 58, 108, 20, "Add")); // Add button
-        buttonList.add(new GuiButton(99, width / 2 - 108, height / 2 + 58, 108, 20, "Cancel")); // Cancel button
-        buttonList.add(rSlider = new GuiSlider(1, width / 2 - 108, height / 2 - 63, "Red", 0, 255));
-        buttonList.add(gSlider = new GuiSlider(2, width / 2 - 108, height / 2 - 40, "Green", 0, 255));
-        buttonList.add(bSlider = new GuiSlider(3, width / 2 - 108, height / 2 - 17, "Blue", 0, 255));
+        String saveButtonTitle = initialOreIdent.equals(IDENT_PLACEHOLDER) ? "Add" : "Save";
+
+        getScreenButtons().add(addButton = new GuiButton(98, width / 2 + 5, height / 2 + 58, 108, 20, saveButtonTitle));
+        getScreenButtons().add(new GuiButton(99, width / 2 - 108, height / 2 + 58, 108, 20, "Cancel"));
+        getScreenButtons().add(rSlider = new GuiSlider(1, width / 2 - 108, height / 2 - 63, "Red", 0, 255));
+        getScreenButtons().add(gSlider = new GuiSlider(2, width / 2 - 108, height / 2 - 40, "Green", 0, 255));
+        getScreenButtons().add(bSlider = new GuiSlider(3, width / 2 - 108, height / 2 - 17, "Blue", 0, 255));
 
         oreName = new GuiTextField(fontRendererObj, width / 2 - 108, height / 2 + 8, 220, 20);
         oreIdent = new GuiTextField(fontRendererObj, width / 2 - 108, height / 2 + 32, 220, 20);
@@ -53,6 +59,11 @@ public class GuiNewOre extends GuiScreen {
         oreName.setText(initialOreName);
         oreIdent.setText(initialOreIdent);
         setColorToSlider(initialOreColor);
+    }
+
+    private List<GuiButton> getScreenButtons() {
+        //noinspection unchecked
+        return this.buttonList;
     }
 
     @Override
@@ -65,14 +76,14 @@ public class GuiNewOre extends GuiScreen {
                     int meta = Integer.parseInt(pair[1]);
                     Ident ident = new Ident(id, meta);
                     ConfigHandler.addBlock(oreName.getText(), ident, getSliderColor());
-                    mc.displayGuiScreen(new GuiSettings());
+                    mc.displayGuiScreen(new GuiScreenXRayMenu());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case 99: // Cancel
-                mc.displayGuiScreen(new GuiSettings());
+                mc.displayGuiScreen(new GuiScreenXRayMenu());
                 break;
             default:
                 break;
@@ -120,7 +131,7 @@ public class GuiNewOre extends GuiScreen {
                     oreName.setFocused(true);
                     break;
                 case 1: // Exit on escape
-                    mc.displayGuiScreen(new GuiSettings());
+                    mc.displayGuiScreen(new GuiScreenXRayMenu());
                     break;
                 default:
                     break;
@@ -142,7 +153,7 @@ public class GuiNewOre extends GuiScreen {
     @Override
     public void drawScreen(int x, int y, float f) {
         drawDefaultBackground();
-        mc.renderEngine.bindTexture(new ResourceLocation("fgtxray:textures/gui/oreAddBackground.png"));
+        mc.renderEngine.bindTexture(new ResourceLocation("schematicaadvancement:textures/gui/oreAddBackground.png"));
         drawTexturedModalRect(width / 2 - 125, height / 2 - 95, 0, 0, 256, 205);
 
         FontRenderer fr = mc.fontRenderer;
@@ -164,13 +175,6 @@ public class GuiNewOre extends GuiScreen {
         GL11.glVertex2d(width / 2 + 113, height / 2 + 3); // BR
         GL11.glVertex2d(width / 2 + 113, height / 2 - 63); // TR
         GL11.glEnd();
-
-        // new
-        // I want to render the item here but i am unsure on how to
-        // do it so i am leaving it for now. :)
-        // RenderItem renderItem = new RenderItem();
-        // IIcon icon = net.minecraft.block.Block.getBlockById(3).getIcon( 1, 2 );
-        // renderItem.renderIcon(50, 50, icon, 16, 16);
     }
 
     @Override
@@ -179,23 +183,22 @@ public class GuiNewOre extends GuiScreen {
         oreName.mouseClicked(x, y, mouse);
         oreIdent.mouseClicked(x, y, mouse);
 
-        if (oreName.isFocused() && !oreNameCleared) {
+        if (oreName.isFocused() && !oreNameCleared && "Name of block".equals(oreName.getText())) {
             oreName.setText("");
             oreNameCleared = true;
         }
-        if (oreIdent.isFocused() && !oreIdentCleared) {
+        if (oreIdent.isFocused() && !oreIdentCleared && IDENT_PLACEHOLDER.equals(oreIdent.getText())) {
             oreIdent.setText("");
             oreIdentCleared = true;
         }
 
-        // TODO: fix bug where if you type then remove it the text will not be put back.
         if (!oreName.isFocused() && oreNameCleared && oreName.getText().isEmpty()) {
             oreNameCleared = false;
             oreName.setText("Name of block");
         }
         if (!oreIdent.isFocused() && oreIdentCleared && oreIdent.getText().isEmpty()) {
             oreIdentCleared = false;
-            oreIdent.setText("ID:META");
+            oreIdent.setText(IDENT_PLACEHOLDER);
         }
     }
 }

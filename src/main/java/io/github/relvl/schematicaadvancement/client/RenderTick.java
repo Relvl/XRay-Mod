@@ -1,13 +1,13 @@
-package com.fgtXray.client;
+package io.github.relvl.schematicaadvancement.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.fgtXray.config.ConfigHandler;
-import com.fgtXray.reference.ColoredPosition;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import io.github.relvl.schematicaadvancement.config.ConfigHandler;
+import io.github.relvl.schematicaadvancement.reference.ColoredPosition;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -16,7 +16,6 @@ public class RenderTick {
     private final Minecraft mc = Minecraft.getMinecraft();
     public static List<ColoredPosition> ores = new ArrayList();
 
-    /** Called when drawing the world. */
     @SubscribeEvent
     public void onRenderEvent(RenderWorldLastEvent event) {
         if (mc.theWorld != null && ConfigHandler.globalEnabled) {
@@ -45,7 +44,7 @@ public class RenderTick {
         Tessellator tes = Tessellator.instance;
 
         // todo! java.util.ConcurrentModificationException
-        for (ColoredPosition info : new ArrayList<ColoredPosition>(ores)) {
+        for (ColoredPosition info : new ArrayList<>(ores)) {
             int bx = info.x;
             int by = info.y;
             int bz = info.z;
@@ -78,13 +77,13 @@ public class RenderTick {
 
             // Corners
             tes.addVertex(bx - px + f1, by - py + f0, bz - pz + f1);
-            tes.addVertex(bx - px + f1, by - py + f1, bz - pz + f1); // Top Left
+            tes.addVertex(bx - px + f1, by - py + f1, bz - pz + f1);
             tes.addVertex(bx - px + f1, by - py + f0, bz - pz + f0);
-            tes.addVertex(bx - px + f1, by - py + f1, bz - pz + f0); // Bottom Left
+            tes.addVertex(bx - px + f1, by - py + f1, bz - pz + f0);
             tes.addVertex(bx - px + f0, by - py + f0, bz - pz + f1);
-            tes.addVertex(bx - px + f0, by - py + f1, bz - pz + f1); // Top Right
+            tes.addVertex(bx - px + f0, by - py + f1, bz - pz + f1);
             tes.addVertex(bx - px + f0, by - py + f0, bz - pz + f0);
-            tes.addVertex(bx - px + f0, by - py + f1, bz - pz + f0); // Bottom Right
+            tes.addVertex(bx - px + f0, by - py + f1, bz - pz + f0);
 
             tes.draw();
         }

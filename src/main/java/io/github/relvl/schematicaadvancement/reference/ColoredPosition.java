@@ -1,7 +1,7 @@
 // This class (structure?) is for holding the blocks x,y,z and color to draw.
 // This gets copied and accessed by RenderTick to draw the boxes around found ores/blocks.
 
-package com.fgtXray.reference;
+package io.github.relvl.schematicaadvancement.reference;
 
 public class ColoredPosition {
     public int x;

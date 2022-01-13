@@ -1,11 +1,11 @@
-package com.fgtXray.config;
+package io.github.relvl.schematicaadvancement.config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fgtXray.Ident;
-import com.fgtXray.reference.BlockInfo;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import io.github.relvl.schematicaadvancement.reference.Ident;
+import io.github.relvl.schematicaadvancement.reference.BlockInfo;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
@@ -25,7 +25,7 @@ public class ConfigHandler {
             config.save();
         }
 
-        radiusIndex = config.get(Configuration.CATEGORY_GENERAL, "radius", 0).getInt();
+        radiusIndex = config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0).getInt();
 
         for (String category : config.getCategoryNames()) {
             ConfigCategory cat = config.getCategory(category);
@@ -62,7 +62,7 @@ public class ConfigHandler {
                 radiusIndex = radiuses.length - 1;
             }
         }
-        config.get(Configuration.CATEGORY_GENERAL, "radius", 0).set(radiusIndex);
+        config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0).set(radiusIndex);
         config.save();
     }
 
@@ -75,8 +75,14 @@ public class ConfigHandler {
     }
 
     public static void addBlock(String name, Ident ident, int color) {
-        BlockInfo info = new BlockInfo(name, ident, color, true);
-        blocks.add(info);
+        BlockInfo info = blocks.stream().filter(bi -> bi.getIdent().equals(ident)).findAny().orElse(null);
+        if (info == null) {
+            info = new BlockInfo(name, ident, color, true);
+            blocks.add(info);
+        }
+        else {
+            info.update(name, color);
+        }
         update(info);
     }
 

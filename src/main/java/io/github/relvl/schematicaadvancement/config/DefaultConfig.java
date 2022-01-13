@@ -1,15 +1,14 @@
-package com.fgtXray.config;
+package io.github.relvl.schematicaadvancement.config;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.fgtXray.reference.BlockInfo;
+import io.github.relvl.schematicaadvancement.reference.BlockInfo;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
 
 public class DefaultConfig {
-    private static final Pattern NAMES_PTN = Pattern.compile("\\s+");
     private static final List<BlockInfo> defaults = new ArrayList<BlockInfo>() {{
         add(new BlockInfo(Blocks.diamond_ore, 0x8888FF, false));
         add(new BlockInfo(Blocks.diamond_block, 0x8888FF, false));
@@ -25,7 +24,7 @@ public class DefaultConfig {
     }};
 
     public static void create(Configuration config) {
-        config.get(Configuration.CATEGORY_GENERAL, "radius", 0);
+        config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0);
         for (BlockInfo ore : defaults) {
             String categoryName = "blocks." + ore.getIdent().getIdentPair();
             config.get(categoryName, "name", "SOMETHINGBROKE").set(ore.name);

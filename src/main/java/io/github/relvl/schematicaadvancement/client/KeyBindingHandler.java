@@ -1,8 +1,8 @@
-package com.fgtXray.client;
+package io.github.relvl.schematicaadvancement.client;
 
-import com.fgtXray.FgtXRay;
-import com.fgtXray.client.gui.GuiSettings;
-import com.fgtXray.config.ConfigHandler;
+import io.github.relvl.schematicaadvancement.ModInstance;
+import io.github.relvl.schematicaadvancement.client.gui.GuiScreenXRayMenu;
+import io.github.relvl.schematicaadvancement.config.ConfigHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -21,15 +21,15 @@ public class KeyBindingHandler {
             return;
         }
 
-        if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_toggleXray].isPressed()) {
+        if (ModInstance.KEY_TOGGLE.isPressed()) {
             ConfigHandler.globalEnabled = !ConfigHandler.globalEnabled;
             RenderTick.ores.clear();
-            FgtXRay.postChat(ConfigHandler.globalEnabled ? FgtXRay.mcFormat("enabled", "a") : FgtXRay.mcFormat("disabled", "7"));
+            ModInstance.postChat(ConfigHandler.globalEnabled ? ModInstance.mcFormat("enabled", "a") : ModInstance.mcFormat("disabled", "7"));
             return;
         }
 
-        if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_showXrayMenu].isPressed()) {
-            mc.displayGuiScreen(new GuiSettings());
+        if (ModInstance.KEY_MENU.isPressed()) {
+            mc.displayGuiScreen(new GuiScreenXRayMenu());
             return;
         }
     }

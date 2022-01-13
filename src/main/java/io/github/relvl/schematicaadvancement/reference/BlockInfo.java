@@ -1,6 +1,5 @@
-package com.fgtXray.reference;
+package io.github.relvl.schematicaadvancement.reference;
 
-import com.fgtXray.Ident;
 import net.minecraft.block.Block;
 
 public class BlockInfo {

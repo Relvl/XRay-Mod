@@ -1,23 +1,23 @@
-package com.fgtXray.client.gui;
+package io.github.relvl.schematicaadvancement.client.gui;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fgtXray.FgtXRay;
-import com.fgtXray.config.ConfigHandler;
-import com.fgtXray.reference.BlockInfo;
+import io.github.relvl.schematicaadvancement.ModInstance;
+import io.github.relvl.schematicaadvancement.config.ConfigHandler;
+import io.github.relvl.schematicaadvancement.reference.BlockInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter")
-public class GuiSettings extends GuiScreen {
-    private static final int PAGE_SIZE = 10; // 14 actually
+public class GuiScreenXRayMenu extends GuiScreen {
+    private static final int PAGE_SIZE = 14;
 
-    private final Map<Integer, GuiOreButton> oreButtons = new HashMap<Integer, GuiOreButton>();
+    private final Map<Integer, GuiBlockButton> oreButtons = new HashMap<Integer, GuiBlockButton>();
 
     private GuiButton aNextButton;
     private GuiButton aPrevButton;
@@ -43,7 +43,7 @@ public class GuiSettings extends GuiScreen {
         int col = 0;
         int id = 1000;
         for (BlockInfo ore : pageList) {
-            GuiOreButton button = new GuiOreButton(id, ore, x + col * 100, y + row * 20);
+            GuiBlockButton button = new GuiBlockButton(id, ore, x + col * 100, y + row * 20);
             oreButtons.put(id, button);
             getScreenButtons().add(button);
             row++;
@@ -85,7 +85,7 @@ public class GuiSettings extends GuiScreen {
                 break;
 
             case 97: // New Ore
-                mc.displayGuiScreen(new GuiNewOre());
+                mc.displayGuiScreen(new GuiScreenBlockEdit());
                 break;
 
             case -150: // Next page
@@ -101,7 +101,7 @@ public class GuiSettings extends GuiScreen {
                 break;
 
             default:
-                GuiOreButton oreButton = oreButtons.get(button.id);
+                GuiBlockButton oreButton = oreButtons.get(button.id);
                 if (oreButton != null) {
                     oreButton.toggleEnabled();
                 }
@@ -114,8 +114,7 @@ public class GuiSettings extends GuiScreen {
     @Override
     protected void keyTyped(char c, int keyCode) {
         super.keyTyped(c, keyCode);
-        if ((keyCode == 1) || (keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) || keyCode == FgtXRay.keyBind_keys[FgtXRay.keyIndex_showXrayMenu].getKeyCode()) {
-            // Close on esc, inventory key or keybind
+        if ((keyCode == 1) || (keyCode == mc.gameSettings.keyBindInventory.getKeyCode()) || keyCode == ModInstance.KEY_MENU.getKeyCode()) {
             mc.thePlayer.closeScreen();
         }
     }
@@ -140,13 +139,13 @@ public class GuiSettings extends GuiScreen {
     @Override
     public void drawScreen(int x, int y, float f) {
         drawDefaultBackground();
-        mc.renderEngine.bindTexture(new ResourceLocation("fgtxray:textures/gui/Background.png"));
+        mc.renderEngine.bindTexture(new ResourceLocation("schematicaadvancement:textures/gui/Background.png"));
         drawTexturedQuadFit(width / 2 - 110, height / 2 - 110, 229, 193, 0);
         super.drawScreen(x, y, f);
 
         for (GuiButton button : getScreenButtons()) {
             if (button.func_146115_a()) { //func_146115_a() returns true if the button is being hovered
-                GuiOreButton oreButton = oreButtons.get(button.id);
+                GuiBlockButton oreButton = oreButtons.get(button.id);
                 if (oreButton == null) {
                     if (button.enabled) {
                         switch (button.id) {
@@ -160,10 +159,11 @@ public class GuiSettings extends GuiScreen {
                     }
                 }
                 else {
-                    this.func_146283_a(Arrays.asList(oreButton.getInfo().name,
-                                                     FgtXRay.mcFormat("LMB: Enable/Disable", "7"),
-                                                     FgtXRay.mcFormat("RMB: Edit", "7"),
-                                                     FgtXRay.mcFormat("Shift+RMB: Delete", "c")
+                    this.func_146283_a(Arrays.asList(
+                        String.format("%s %s", oreButton.getInfo().name, ModInstance.mcFormat(oreButton.getInfo().getIdent().getIdentPair(), "3")),
+                        ModInstance.mcFormat("LMB: Enable/Disable", "7"),
+                        ModInstance.mcFormat("RMB: Edit", "7"),
+                        ModInstance.mcFormat("Shift+RMB: Delete", "c")
                     ), x, y);
                 }
                 break;
@@ -185,14 +185,14 @@ public class GuiSettings extends GuiScreen {
                         return;
                     }
 
-                    GuiOreButton oreButton = oreButtons.get(button.id);
+                    GuiBlockButton oreButton = oreButtons.get(button.id);
                     if (oreButton != null) {
                         if (isShiftKeyDown()) {
                             ConfigHandler.remove(oreButton.getInfo());
                             this.initGui();
                         }
                         else {
-                            mc.displayGuiScreen(new GuiNewOre(oreButton.getInfo()));
+                            mc.displayGuiScreen(new GuiScreenBlockEdit(oreButton.getInfo()));
                         }
                     }
 

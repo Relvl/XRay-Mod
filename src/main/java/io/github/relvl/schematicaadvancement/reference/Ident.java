@@ -1,4 +1,4 @@
-package com.fgtXray;
+package io.github.relvl.schematicaadvancement.reference;
 
 import java.util.Objects;
 
