@@ -26,7 +26,7 @@ public class ClientTick implements Runnable {
             FgtXRay.localPlyY = MathHelper.floor_double(mc.thePlayer.posY);
             FgtXRay.localPlyZ = MathHelper.floor_double(mc.thePlayer.posZ);
 
-            if (FgtXRay.drawOres && ((this.thread == null) || !this.thread.isAlive()) && ((mc.theWorld != null))) {
+            if (ConfigHandler.globalEnabled && ((this.thread == null) || !this.thread.isAlive()) && ((mc.theWorld != null))) {
                 this.thread = new Thread(this);
                 this.thread.setDaemon(false);
                 this.thread.setPriority(Thread.MAX_PRIORITY);
@@ -41,14 +41,14 @@ public class ClientTick implements Runnable {
         try {
             // Check the internal interrupt flag. Exit thread if set.
             while (!this.thread.isInterrupted()) {
-                if (FgtXRay.drawOres && !OresSearch.searchList.isEmpty() && (mc != null) && (mc.theWorld != null) && (mc.thePlayer != null)) {
+                if (ConfigHandler.globalEnabled && !ConfigHandler.blocks.isEmpty() && (mc != null) && (mc.theWorld != null) && (mc.thePlayer != null)) {
                     // Delay to avoid spamming ore updates.
                     if (nextTimeMs > System.currentTimeMillis()) {
                         continue;
                     }
 
                     List<ColoredPosition> temp = new ArrayList<ColoredPosition>();
-                    int radius = ConfigHandler.getDistance();
+                    int radius = ConfigHandler.getRadius();
                     int px = FgtXRay.localPlyX;
                     int py = FgtXRay.localPlyY;
                     int pz = FgtXRay.localPlyZ;
@@ -58,7 +58,7 @@ public class ClientTick implements Runnable {
                                 int id = Block.getIdFromBlock(mc.theWorld.getBlock(x, y, z));
                                 int meta = mc.theWorld.getBlockMetadata(x, y, z);
 
-                                for (BlockInfo ore : OresSearch.searchList) {
+                                for (BlockInfo ore : ConfigHandler.blocks) {
                                     if (ore.enabled && ore.getIdent().equals(id, meta)) {
                                         temp.add(new ColoredPosition(x, y, z, ore.color));
                                         break;

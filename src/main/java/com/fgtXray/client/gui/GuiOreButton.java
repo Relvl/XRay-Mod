@@ -6,29 +6,25 @@ import net.minecraft.client.gui.GuiButton;
 
 /** @author Johnson on 13.01.2022 */
 public class GuiOreButton extends GuiButton {
-    private final BlockInfo ore;
+    private final BlockInfo info;
 
-    public GuiOreButton(int id, BlockInfo ore, int x, int y) {
-        super(id, x, y, 100, 20, ore.name);
-        this.ore = ore;
+    public GuiOreButton(int id, BlockInfo info, int x, int y) {
+        super(id, x, y, 100, 20, info.name);
+        this.info = info;
         this.updateTitle();
     }
 
     private void updateTitle() {
-        displayString = ore.name + ": " + (ore.enabled ? "on" : "off");
+        displayString = info.name + ": " + (info.enabled ? "on" : "off");
     }
 
     public void toggleEnabled() {
-        ore.enabled = !ore.enabled;
-        ConfigHandler.update(ore.name, ore.enabled);
+        info.enabled = !info.enabled;
+        ConfigHandler.update(info);
         updateTitle();
     }
 
-    public BlockInfo getOre() {
-        return ore;
-    }
-
-    public void deleteOre(){
-
+    public BlockInfo getInfo() {
+        return info;
     }
 }

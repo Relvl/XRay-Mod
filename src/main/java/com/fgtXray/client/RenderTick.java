@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.fgtXray.FgtXRay;
+import com.fgtXray.config.ConfigHandler;
 import com.fgtXray.reference.ColoredPosition;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ public class RenderTick {
     /** Called when drawing the world. */
     @SubscribeEvent
     public void onRenderEvent(RenderWorldLastEvent event) {
-        if (mc.theWorld != null && FgtXRay.drawOres) {
+        if (mc.theWorld != null && ConfigHandler.globalEnabled) {
             float partialTicks = event.partialTicks;
             float playerX = (float)mc.thePlayer.posX;
             float playerY = (float)mc.thePlayer.posY;

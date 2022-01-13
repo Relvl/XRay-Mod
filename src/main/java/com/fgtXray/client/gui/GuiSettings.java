@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fgtXray.FgtXRay;
-import com.fgtXray.client.OresSearch;
 import com.fgtXray.config.ConfigHandler;
 import com.fgtXray.reference.BlockInfo;
 import net.minecraft.client.gui.GuiButton;
@@ -36,9 +35,9 @@ public class GuiSettings extends GuiScreen {
         int y = height / 2 - 100;
 
         int offsetFrom = PAGE_SIZE * pageCurrent;
-        int offsetTo = Math.min(PAGE_SIZE * pageCurrent + PAGE_SIZE, OresSearch.searchList.size());
-        List<BlockInfo> pageList = OresSearch.searchList.subList(offsetFrom, offsetTo);
-        pageMax = (OresSearch.searchList.size() / PAGE_SIZE);
+        int offsetTo = Math.min(PAGE_SIZE * pageCurrent + PAGE_SIZE, ConfigHandler.blocks.size());
+        List<BlockInfo> pageList = ConfigHandler.blocks.subList(offsetFrom, offsetTo);
+        pageMax = (ConfigHandler.blocks.size() / PAGE_SIZE);
 
         int row = 0;
         int col = 0;
@@ -60,7 +59,7 @@ public class GuiSettings extends GuiScreen {
         getScreenButtons().add(aNextButton = new GuiButton(-150, width / 2 + 75, height / 2 + 52, 30, 20, ">"));
         getScreenButtons().add(aPrevButton = new GuiButton(-151, width / 2 - 100, height / 2 + 52, 30, 20, "<"));
 
-        if (OresSearch.searchList.size() <= PAGE_SIZE) {
+        if (ConfigHandler.blocks.size() <= PAGE_SIZE) {
             aNextButton.enabled = false;
             aPrevButton.enabled = false;
         }
@@ -161,7 +160,11 @@ public class GuiSettings extends GuiScreen {
                     }
                 }
                 else {
-                    this.func_146283_a(Arrays.asList(oreButton.getOre().name, "§7LMB: enable/disable§r", "§7RMB: Edit§r", "§7Shift+RMB: Delete§r"), x, y);
+                    this.func_146283_a(Arrays.asList(oreButton.getInfo().name,
+                                                     FgtXRay.mcFormat("LMB: Enable/Disable", "7"),
+                                                     FgtXRay.mcFormat("RMB: Edit", "7"),
+                                                     FgtXRay.mcFormat("Shift+RMB: Delete", "c")
+                    ), x, y);
                 }
                 break;
             }
@@ -185,11 +188,11 @@ public class GuiSettings extends GuiScreen {
                     GuiOreButton oreButton = oreButtons.get(button.id);
                     if (oreButton != null) {
                         if (isShiftKeyDown()) {
-                            oreButton.deleteOre();
+                            ConfigHandler.remove(oreButton.getInfo());
                             this.initGui();
                         }
                         else {
-                            mc.displayGuiScreen(new GuiNewOre(oreButton.getOre()));
+                            mc.displayGuiScreen(new GuiNewOre(oreButton.getInfo()));
                         }
                     }
 

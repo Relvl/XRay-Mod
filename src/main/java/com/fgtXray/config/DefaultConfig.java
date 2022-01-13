@@ -27,10 +27,11 @@ public class DefaultConfig {
     public static void create(Configuration config) {
         config.get(Configuration.CATEGORY_GENERAL, "radius", 0);
         for (BlockInfo ore : defaults) {
-            String categoryName = "blocks." + ore.getIdent().getPair();
+            String categoryName = "blocks." + ore.getIdent().getIdentPair();
             config.get(categoryName, "name", "SOMETHINGBROKE").set(ore.name);
             config.get(categoryName, "color", -1).set(ore.color);
             config.get(categoryName, "enabled", false).set(ore.enabled);
         }
+        config.save();
     }
 }

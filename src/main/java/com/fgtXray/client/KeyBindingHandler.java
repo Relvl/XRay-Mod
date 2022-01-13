@@ -2,6 +2,7 @@ package com.fgtXray.client;
 
 import com.fgtXray.FgtXRay;
 import com.fgtXray.client.gui.GuiSettings;
+import com.fgtXray.config.ConfigHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -20,13 +21,10 @@ public class KeyBindingHandler {
             return;
         }
 
-        if (OresSearch.searchList.isEmpty()) {
-            OresSearch.fillDictionary();
-        }
-
         if (FgtXRay.keyBind_keys[FgtXRay.keyIndex_toggleXray].isPressed()) {
-            FgtXRay.drawOres = !FgtXRay.drawOres;
+            ConfigHandler.globalEnabled = !ConfigHandler.globalEnabled;
             RenderTick.ores.clear();
+            FgtXRay.postChat(ConfigHandler.globalEnabled ? FgtXRay.mcFormat("enabled", "a") : FgtXRay.mcFormat("disabled", "7"));
             return;
         }
 

@@ -24,7 +24,7 @@ public class BlockInfo {
     }
 
     public BlockInfo(Block block, int color, boolean enabled) {
-        this.name = block.getUnlocalizedName();
+        this.name = block.getLocalizedName();
         this.ident = new Ident(block);
         this.color = color;
         this.enabled = enabled;

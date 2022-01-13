@@ -3,7 +3,7 @@ package com.fgtXray.client.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.fgtXray.Ident;
-import com.fgtXray.client.OresSearch;
+import com.fgtXray.config.ConfigHandler;
 import com.fgtXray.reference.BlockInfo;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -35,7 +35,7 @@ public class GuiNewOre extends GuiScreen {
 
     public GuiNewOre(BlockInfo ore) {
         this.initialOreName = ore.name;
-        this.initialOreIdent = ore.getIdent().getPair();
+        this.initialOreIdent = ore.getIdent().getIdentPair();
         this.initialOreColor = ore.color;
     }
 
@@ -59,13 +59,12 @@ public class GuiNewOre extends GuiScreen {
     public void actionPerformed(GuiButton button) {
         switch (button.id) {
             case 98: // Add
-
                 try {
                     String[] pair = oreIdent.getText().split(":");
                     int id = Integer.parseInt(pair[0]);
                     int meta = Integer.parseInt(pair[1]);
                     Ident ident = new Ident(id, meta);
-                    OresSearch.add(oreIdent.getText(), oreName.getText(), getSliderColor());
+                    ConfigHandler.addBlock(oreName.getText(), ident, getSliderColor());
                     mc.displayGuiScreen(new GuiSettings());
                 }
                 catch (Exception e) {
