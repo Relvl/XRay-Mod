@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.fgtXray.FgtXRay;
-import com.fgtXray.reference.BlockInfo;
+import com.fgtXray.reference.ColoredPosition;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,7 +14,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 public class RenderTick {
     private final Minecraft mc = Minecraft.getMinecraft();
-    public static List<BlockInfo> ores = new ArrayList();
+    public static List<ColoredPosition> ores = new ArrayList();
 
     /** Called when drawing the world. */
     @SubscribeEvent
@@ -45,7 +45,7 @@ public class RenderTick {
         Tessellator tes = Tessellator.instance;
 
         // todo! java.util.ConcurrentModificationException
-        for (BlockInfo info : new ArrayList<BlockInfo>(ores)) {
+        for (ColoredPosition info : new ArrayList<ColoredPosition>(ores)) {
             int bx = info.x;
             int by = info.y;
             int bz = info.z;

@@ -8,7 +8,7 @@ import java.util.Map;
 import com.fgtXray.FgtXRay;
 import com.fgtXray.client.OresSearch;
 import com.fgtXray.config.ConfigHandler;
-import com.fgtXray.reference.OreInfo;
+import com.fgtXray.reference.BlockInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
@@ -37,13 +37,13 @@ public class GuiSettings extends GuiScreen {
 
         int offsetFrom = PAGE_SIZE * pageCurrent;
         int offsetTo = Math.min(PAGE_SIZE * pageCurrent + PAGE_SIZE, OresSearch.searchList.size());
-        List<OreInfo> pageList = OresSearch.searchList.subList(offsetFrom, offsetTo);
+        List<BlockInfo> pageList = OresSearch.searchList.subList(offsetFrom, offsetTo);
         pageMax = (OresSearch.searchList.size() / PAGE_SIZE);
 
         int row = 0;
         int col = 0;
         int id = 1000;
-        for (OreInfo ore : pageList) {
+        for (BlockInfo ore : pageList) {
             GuiOreButton button = new GuiOreButton(id, ore, x + col * 100, y + row * 20);
             oreButtons.put(id, button);
             getScreenButtons().add(button);
@@ -56,7 +56,7 @@ public class GuiSettings extends GuiScreen {
         }
 
         getScreenButtons().add(new GuiButton(97, width / 2 - 67, height / 2 + 52, 55, 20, "Add Ore"));
-        getScreenButtons().add(new GuiButton(98, width / 2 - 10, height / 2 + 52, 82, 20, "Distance: " + FgtXRay.distStrings[FgtXRay.distIndex]));
+        getScreenButtons().add(new GuiButton(98, width / 2 - 10, height / 2 + 52, 82, 20, "Distance: " + ConfigHandler.getDistanceTitle()));
         getScreenButtons().add(aNextButton = new GuiButton(-150, width / 2 + 75, height / 2 + 52, 30, 20, ">"));
         getScreenButtons().add(aPrevButton = new GuiButton(-151, width / 2 - 100, height / 2 + 52, 30, 20, "<"));
 
@@ -82,13 +82,7 @@ public class GuiSettings extends GuiScreen {
         // Called on left click of GuiButton
         switch (button.id) {
             case 98: // Distance
-                if (FgtXRay.distIndex < FgtXRay.distNumbers.length - 1) {
-                    FgtXRay.distIndex++;
-                }
-                else {
-                    FgtXRay.distIndex = 0;
-                }
-                ConfigHandler.update("searchdist", false);
+                ConfigHandler.changeDistance(+1);
                 break;
 
             case 97: // New Ore
@@ -167,7 +161,7 @@ public class GuiSettings extends GuiScreen {
                     }
                 }
                 else {
-                    this.func_146283_a(Arrays.asList(oreButton.getOre().oreName, "§7LMB: enable/disable§r", "§7RMB: Edit§r", "§7Shift+RMB: Delete§r"), x, y);
+                    this.func_146283_a(Arrays.asList(oreButton.getOre().name, "§7LMB: enable/disable§r", "§7RMB: Edit§r", "§7Shift+RMB: Delete§r"), x, y);
                 }
                 break;
             }
@@ -183,13 +177,7 @@ public class GuiSettings extends GuiScreen {
                 if (button.func_146115_a()) { //func_146115_a() returns true if the button is being hovered
 
                     if (button.id == 98) { // distance
-                        if (FgtXRay.distIndex > 0) {
-                            FgtXRay.distIndex--;
-                        }
-                        else {
-                            FgtXRay.distIndex = FgtXRay.distNumbers.length - 1;
-                        }
-                        ConfigHandler.update("searchdist", false);
+                        ConfigHandler.changeDistance(-1);
                         this.initGui();
                         return;
                     }

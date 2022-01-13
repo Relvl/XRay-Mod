@@ -2,8 +2,9 @@ package com.fgtXray.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.fgtXray.Ident;
 import com.fgtXray.client.OresSearch;
-import com.fgtXray.reference.OreInfo;
+import com.fgtXray.reference.BlockInfo;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -32,9 +33,9 @@ public class GuiNewOre extends GuiScreen {
         this.initialOreColor = 0x00FF00;
     }
 
-    public GuiNewOre(OreInfo ore) {
-        this.initialOreName = ore.oreName;
-        this.initialOreIdent = ore.id + ":" + ore.meta;
+    public GuiNewOre(BlockInfo ore) {
+        this.initialOreName = ore.name;
+        this.initialOreIdent = ore.getIdent().getPair();
         this.initialOreColor = ore.color;
     }
 
@@ -58,9 +59,18 @@ public class GuiNewOre extends GuiScreen {
     public void actionPerformed(GuiButton button) {
         switch (button.id) {
             case 98: // Add
-                OresSearch.add(oreIdent.getText(), oreName.getText(), getSliderColor());
 
-                mc.displayGuiScreen(new GuiSettings());
+                try {
+                    String[] pair = oreIdent.getText().split(":");
+                    int id = Integer.parseInt(pair[0]);
+                    int meta = Integer.parseInt(pair[1]);
+                    Ident ident = new Ident(id, meta);
+                    OresSearch.add(oreIdent.getText(), oreName.getText(), getSliderColor());
+                    mc.displayGuiScreen(new GuiSettings());
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case 99: // Cancel
                 mc.displayGuiScreen(new GuiSettings());

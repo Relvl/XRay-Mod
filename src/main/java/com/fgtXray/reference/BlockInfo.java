@@ -1,16 +1,50 @@
-// This class (structure?) is for holding the blocks x,y,z and color to draw.
-// This gets copied and accessed by RenderTick to draw the boxes around found ores/blocks.
-
 package com.fgtXray.reference;
 
-public class BlockInfo {
-    public int x, y, z;
-    public int color;
+import com.fgtXray.Ident;
+import net.minecraft.block.Block;
 
-    public BlockInfo(int bx, int by, int bz, int c) {
-        this.x = bx;
-        this.y = by;
-        this.z = bz;
-        this.color = c;
+public class BlockInfo {
+    public String name;
+    private Ident ident;
+    public int color;
+    public boolean enabled;
+
+    public BlockInfo(String name, Ident ident, int color, boolean enabled) {
+        this.name = name;
+        this.ident = ident;
+        this.color = color;
+        this.enabled = enabled;
+    }
+
+    public BlockInfo(String name, Block block, int color, boolean enabled) {
+        this.name = name;
+        this.ident = new Ident(block);
+        this.color = color;
+        this.enabled = enabled;
+    }
+
+    public BlockInfo(Block block, int color, boolean enabled) {
+        this.name = block.getUnlocalizedName();
+        this.ident = new Ident(block);
+        this.color = color;
+        this.enabled = enabled;
+    }
+
+    public Ident getIdent() {
+        return ident;
+    }
+
+    public void disable() {
+        this.enabled = false;
+    }
+
+    public void enable() {
+        this.enabled = true;
+    }
+
+    public void update(String oreName, int color) {
+        this.name = oreName;
+        this.color = color;
+        this.enabled = true;
     }
 }

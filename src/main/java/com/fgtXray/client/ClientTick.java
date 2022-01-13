@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fgtXray.FgtXRay;
+import com.fgtXray.config.ConfigHandler;
 import com.fgtXray.reference.BlockInfo;
-import com.fgtXray.reference.OreInfo;
+import com.fgtXray.reference.ColoredPosition;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
@@ -46,8 +47,8 @@ public class ClientTick implements Runnable {
                         continue;
                     }
 
-                    List<BlockInfo> temp = new ArrayList<BlockInfo>();
-                    int radius = FgtXRay.distNumbers[FgtXRay.distIndex]; // Get the radius around the player to search.
+                    List<ColoredPosition> temp = new ArrayList<ColoredPosition>();
+                    int radius = ConfigHandler.getDistance();
                     int px = FgtXRay.localPlyX;
                     int py = FgtXRay.localPlyY;
                     int pz = FgtXRay.localPlyZ;
@@ -57,24 +58,18 @@ public class ClientTick implements Runnable {
                                 int id = Block.getIdFromBlock(mc.theWorld.getBlock(x, y, z));
                                 int meta = mc.theWorld.getBlockMetadata(x, y, z);
 
-                                if (mc.theWorld.getBlock(x, y, z).hasTileEntity()) {
-                                    meta = 0;
-                                }
-
-                                // Now we're actually checking if the current x,y,z block is in our searchList.
-                                for (OreInfo ore : OresSearch.searchList) {
-                                    // Dont check meta if its -1 (custom)
-                                    if ((ore.draw) && (id == ore.id) && (meta == ore.meta)) {
-                                        temp.add(new BlockInfo(x, y, z, ore.color)); // Add this block to the temp list
-                                        break; // Found a match, move on to the next block.
+                                for (BlockInfo ore : OresSearch.searchList) {
+                                    if (ore.enabled && ore.getIdent().equals(id, meta)) {
+                                        temp.add(new ColoredPosition(x, y, z, ore.color));
+                                        break;
                                     }
                                 }
                             }
                         }
                     }
                     RenderTick.ores.clear();
-                    RenderTick.ores.addAll(temp); // Add all our found blocks to the RenderTick.ores list. To be use by RenderTick when drawing.
-                    nextTimeMs = System.currentTimeMillis() + delayMs; // Update the delay.
+                    RenderTick.ores.addAll(temp);
+                    nextTimeMs = System.currentTimeMillis() + delayMs;
                 }
                 else {
                     this.thread.interrupt(); // Kill the thread if we turn off xray or the player/world object becomes null.

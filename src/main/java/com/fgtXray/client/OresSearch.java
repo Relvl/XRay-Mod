@@ -1,34 +1,32 @@
 package com.fgtXray.client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.fgtXray.FgtXRay;
+import com.fgtXray.Ident;
 import com.fgtXray.config.ConfigHandler;
-import com.fgtXray.reference.OreInfo;
+import com.fgtXray.reference.BlockInfo;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class OresSearch {
-    public static final List<OreInfo> searchList = new ArrayList<OreInfo>(); // List of ores/blocks to search for.
+    public static final List<BlockInfo> searchList = new ArrayList<BlockInfo>(); // List of ores/blocks to search for.
     private static final Pattern TESTPTN = Pattern.compile("\\p{C}");
 
     // Used to check if a OreInfo already exists in the searchList
-    private static boolean checkList(List<OreInfo> temp, OreInfo value, ItemStack stack) {
-        for (OreInfo oreCheck : temp) {
-            if ((oreCheck.oreName == value.oreName) && (oreCheck.id == Item.getIdFromItem(stack.getItem())) && (oreCheck.meta == stack.getItemDamage())) {
-                return true; // This ore already exists in the temp list. (Sometimes the OreDict returns duplicate entries, like gold twice)
+    private static boolean checkList(List<BlockInfo> temp, BlockInfo value, ItemStack stack) {
+        for (BlockInfo info : temp) {
+            if ((info.name.equals(value.name)) && info.getIdent().equals(Item.getIdFromItem(stack.getItem()), stack.getItemDamage())) {
+                return true;
             }
         }
         return false;
     }
 
     // Takes a string of id:meta or oreName to add to our search list.
-    public static void add(String oreIdent, String name, int color) {
+    public static void add(Ident ident, String name, int color) {
         oreIdent = TESTPTN.matcher(oreIdent).replaceAll("?");
         int id;
         int meta;
@@ -50,7 +48,6 @@ public class OresSearch {
                 FgtXRay.postChat(String.format("%s contains data other than numbers and the colon. Failed to add.", oreIdent));
                 return;
             }
-
         }
         else {
             try {
@@ -63,14 +60,15 @@ public class OresSearch {
             }
         }
 
-        OreInfo existed = searchList.stream().filter(x -> x.id == id && x.meta == meta).findAny().orElse(null);
+        BlockInfo existed = searchList.stream().filter(info -> info.getIdent().equals(id, meta)).findAny().orElse(null);
         if (existed != null) {
-            String oldName = existed.oreName;
+            String oldName = existed.name;
             existed.update(name, color);
             ConfigHandler.replace(oldName, existed);
         }
         else {
-            searchList.add(new OreInfo(name, id, meta, color, true));
+            Ident ident = new Ident(id, meta);
+            searchList.add(new BlockInfo(name, ident, color, true));
             FgtXRay.postChat(String.format("successfully added %s.", oreIdent));
             ConfigHandler.add(name, oreIdent, color);
         }
@@ -81,46 +79,10 @@ public class OresSearch {
     }
 
     // Return the searchList, create it if needed.
-    public static List<OreInfo> fillDictionary() {
+    public static List<BlockInfo> fillDictionary() {
         if (searchList.isEmpty()) {
-            List<OreInfo> temp = new ArrayList(); // Temporary array of OreInfos to replace searchList
-            Map<String, OreInfo> tempOredict = new HashMap<String, OreInfo>(); // Temporary oredict map to replace oredictOres
-
-            for (String oreName : OreDictionary.getOreNames()) {
-                if (FgtXRay.oredictOres.containsKey(oreName)) {
-                    tempOredict.put(oreName, FgtXRay.oredictOres.get(oreName));
-                }
-            }
-            for (Map.Entry<String, OreInfo> entry : FgtXRay.oredictOres.entrySet()) {
-                String key = entry.getKey();
-                if (!tempOredict.containsKey(key)) {
-                    System.out.println(String.format("[Fgt XRay] Ore %s doesn't exist in dictionary! Deleting.", key));
-                }
-            }
-            FgtXRay.oredictOres.clear();
-            FgtXRay.oredictOres.putAll(tempOredict);
-            tempOredict.clear();
-
-            // Now we can iterate over the clean oredictOres and get all the different types of oreName
-            for (Map.Entry<String, OreInfo> entry : FgtXRay.oredictOres.entrySet()) {
-                String key = entry.getKey(); // oreName string
-                OreInfo value = entry.getValue(); // OreInfo class
-
-                List<ItemStack> oreDictOres = OreDictionary.getOres(key);
-                if (oreDictOres.size() < 1) {
-                    continue;
-                }
-                for (ItemStack oreItem : oreDictOres) {
-                    if (checkList(temp, value, oreItem)) {
-                        continue;
-                    }
-                    temp.add(new OreInfo(value.oreName, Item.getIdFromItem(oreItem.getItem()), oreItem.getItemDamage(), value.color, value.draw));
-                }
-            }
-
             searchList.clear();
-            searchList.addAll(temp);
-            searchList.addAll(FgtXRay.customOres);
+            searchList.addAll(FgtXRay.blocks);
         }
         return searchList;
     }
