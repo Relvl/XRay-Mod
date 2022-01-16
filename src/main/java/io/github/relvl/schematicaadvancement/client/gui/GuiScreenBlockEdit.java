@@ -73,7 +73,7 @@ public class GuiScreenBlockEdit extends GuiScreen {
                 try {
                     String[] pair = oreIdent.getText().split(":");
                     int id = Integer.parseInt(pair[0]);
-                    int meta = Integer.parseInt(pair[1]);
+                    int meta = pair.length > 1 ? Integer.parseInt(pair[1]) : -1;
                     Ident ident = new Ident(id, meta);
                     ConfigHandler.addBlock(oreName.getText(), ident, getSliderColor());
                     mc.displayGuiScreen(new GuiScreenXRayMenu());

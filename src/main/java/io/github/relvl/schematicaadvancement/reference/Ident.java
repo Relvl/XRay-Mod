@@ -48,7 +48,7 @@ public class Ident {
     }
 
     public boolean equals(int id, int meta) {
-        return this.id == id && this.meta == meta;
+        return this.id == id && (this.meta == -1 || this.meta == meta);
     }
 
     @Override
