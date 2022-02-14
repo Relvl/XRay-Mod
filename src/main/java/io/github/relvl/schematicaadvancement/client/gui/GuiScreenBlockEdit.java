@@ -77,7 +77,7 @@ public class GuiScreenBlockEdit extends GuiScreen {
                     Ident ident = new Ident(id, meta);
 
                     String name = oreName.getText();
-                    if (name == null || name.isEmpty()) {
+                    if (name == null || name.isEmpty() || "Name of block".equals(name)) {
                         name = ident.getItemStack().getDisplayName();
                     }
                     ConfigHandler.addBlock(name, ident, getSliderColor());
