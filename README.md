@@ -3,7 +3,7 @@ Minecraft Forge XRay mod for 1.7.10
 
 I WILL NOT port this mod to MC version 1.8+ until GTNH don't (never).
 
-Mod id and file name NOT CONTAINS 'xray' or 'chest' word and sometimes will be changed.
+Mod id and file name DO NOT CONTAINS 'xray' or 'cheat' words and sometimes will be changed.
 
 ## Features:
     - Awesome GUI
