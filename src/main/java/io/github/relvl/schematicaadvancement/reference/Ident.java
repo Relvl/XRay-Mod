@@ -3,12 +3,17 @@ package io.github.relvl.schematicaadvancement.reference;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.ConfigCategory;
 
 public class Ident {
     private final int id;
     private final int meta;
     private final String identPair;
+
+    private ItemStack itemStack;
+    private boolean itemStackLoadingAttempted;
 
     public Ident() {
         id = 0;
@@ -49,6 +54,19 @@ public class Ident {
 
     public boolean equals(int id, int meta) {
         return this.id == id && (this.meta == -1 || this.meta == meta);
+    }
+
+    public ItemStack getItemStack() {
+        if (itemStack == null && !itemStackLoadingAttempted) {
+            try {
+                itemStack = new ItemStack(Item.getItemById(id), 1, meta);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            itemStackLoadingAttempted = true;
+        }
+        return itemStack;
     }
 
     @Override

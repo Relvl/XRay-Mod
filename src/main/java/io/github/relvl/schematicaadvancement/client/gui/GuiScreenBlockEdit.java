@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import io.github.relvl.schematicaadvancement.reference.Ident;
 import io.github.relvl.schematicaadvancement.config.ConfigHandler;
 import io.github.relvl.schematicaadvancement.reference.BlockInfo;
+import io.github.relvl.schematicaadvancement.reference.Ident;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,9 +27,9 @@ public class GuiScreenBlockEdit extends GuiScreen {
     private boolean oreNameCleared;
     private boolean oreIdentCleared;
 
-    private String initialOreName = "";
-    private String initialOreIdent = "";
-    private int initialOreColor = 0;
+    private final String initialOreName;
+    private final String initialOreIdent;
+    private final int initialOreColor;
 
     public GuiScreenBlockEdit() {
         this.initialOreIdent = IDENT_PLACEHOLDER;
@@ -75,11 +75,18 @@ public class GuiScreenBlockEdit extends GuiScreen {
                     int id = Integer.parseInt(pair[0]);
                     int meta = pair.length > 1 ? Integer.parseInt(pair[1]) : -1;
                     Ident ident = new Ident(id, meta);
-                    ConfigHandler.addBlock(oreName.getText(), ident, getSliderColor());
-                    mc.displayGuiScreen(new GuiScreenXRayMenu());
+
+                    String name = oreName.getText();
+                    if (name == null || name.isEmpty()) {
+                        name = ident.getItemStack().getDisplayName();
+                    }
+                    ConfigHandler.addBlock(name, ident, getSliderColor());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
+                }
+                finally {
+                    mc.displayGuiScreen(new GuiScreenXRayMenu());
                 }
                 break;
             case 99: // Cancel
