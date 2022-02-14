@@ -1,5 +1,6 @@
 ## Fgt X-Ray
-Minecraft Forge XRay mod
+Minecraft Forge XRay mod for 1.7.10
+I WILL NOT port this mod ported to MC 1.8+ until GTNH don't (never).
 
 ## Feature:
     - Awesome GUI
@@ -21,6 +22,7 @@ Tested with:
  - GT: New Horizins modpack
 
 The rendering is copied off of CJB's MoreInfo mod. Thanks CJB!
+
 The oroginal code is copied off from https://github.com/MichaelHillcox/XRay-Mod Thanks guys!
 
 ## License
