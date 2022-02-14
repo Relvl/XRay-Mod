@@ -2,6 +2,7 @@
   <configuration default="false" name="Minecraft Client" type="Application" factoryName="Application" singleton="false">
     <option name="MAIN_CLASS_NAME" value="GradleStart" />
     <module name="XRay-Mod.main" />
+    <option name="PROGRAM_PARAMETERS" value="--username Johnson" />
     <option name="VM_PARAMETERS" value="-Xincgc -Xmx1024M -Xms1024M" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/eclipse" />
     <RunnerSettings RunnerId="Run" />

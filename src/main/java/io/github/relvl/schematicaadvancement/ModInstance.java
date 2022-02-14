@@ -2,16 +2,16 @@ package io.github.relvl.schematicaadvancement;
 
 import org.lwjgl.input.Keyboard;
 
-import io.github.relvl.schematicaadvancement.client.ClientTick;
-import io.github.relvl.schematicaadvancement.client.KeyBindingHandler;
-import io.github.relvl.schematicaadvancement.client.RenderTick;
-import io.github.relvl.schematicaadvancement.config.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import io.github.relvl.schematicaadvancement.client.ClientTick;
+import io.github.relvl.schematicaadvancement.client.KeyBindingHandler;
+import io.github.relvl.schematicaadvancement.client.RenderTick;
+import io.github.relvl.schematicaadvancement.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ChatComponentText;
@@ -36,6 +36,7 @@ public class ModInstance {
 
         FMLCommonHandler.instance().bus().register(new KeyBindingHandler());
         FMLCommonHandler.instance().bus().register(new ClientTick());
+        MinecraftForge.EVENT_BUS.register(new ClientActionHandler());
         MinecraftForge.EVENT_BUS.register(new RenderTick());
     }
 

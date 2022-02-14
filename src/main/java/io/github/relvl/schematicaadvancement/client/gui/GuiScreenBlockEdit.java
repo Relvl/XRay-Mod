@@ -19,9 +19,9 @@ public class GuiScreenBlockEdit extends GuiScreen {
     private GuiTextField oreName;
     private GuiTextField oreIdent;
 
-    private GuiSlider rSlider;
-    private GuiSlider gSlider;
-    private GuiSlider bSlider;
+    private GuiColourSlider rSlider;
+    private GuiColourSlider gSlider;
+    private GuiColourSlider bSlider;
     private GuiButton addButton;
 
     private boolean oreNameCleared;
@@ -49,9 +49,9 @@ public class GuiScreenBlockEdit extends GuiScreen {
 
         getScreenButtons().add(addButton = new GuiButton(98, width / 2 + 5, height / 2 + 58, 108, 20, saveButtonTitle));
         getScreenButtons().add(new GuiButton(99, width / 2 - 108, height / 2 + 58, 108, 20, "Cancel"));
-        getScreenButtons().add(rSlider = new GuiSlider(1, width / 2 - 108, height / 2 - 63, "Red", 0, 255));
-        getScreenButtons().add(gSlider = new GuiSlider(2, width / 2 - 108, height / 2 - 40, "Green", 0, 255));
-        getScreenButtons().add(bSlider = new GuiSlider(3, width / 2 - 108, height / 2 - 17, "Blue", 0, 255));
+        getScreenButtons().add(rSlider = new GuiColourSlider(1, width / 2 - 108, height / 2 - 63, "Red", 0, 255));
+        getScreenButtons().add(gSlider = new GuiColourSlider(2, width / 2 - 108, height / 2 - 40, "Green", 0, 255));
+        getScreenButtons().add(bSlider = new GuiColourSlider(3, width / 2 - 108, height / 2 - 17, "Blue", 0, 255));
 
         oreName = new GuiTextField(fontRendererObj, width / 2 - 108, height / 2 + 8, 220, 20);
         oreIdent = new GuiTextField(fontRendererObj, width / 2 - 108, height / 2 + 32, 220, 20);

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import io.github.relvl.schematicaadvancement.reference.Ident;
 import io.github.relvl.schematicaadvancement.reference.BlockInfo;
+import io.github.relvl.schematicaadvancement.reference.Ident;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
@@ -66,12 +66,18 @@ public class ConfigHandler {
         config.save();
     }
 
-    public static int getRadius() {
-        return radiuses[radiusIndex];
+    public static int getRadiusIndex() {
+        return radiusIndex;
     }
 
-    public static String getDistanceTitle() {
-        return String.format("R: %d", getRadius());
+    public static void setRadiusIndex(int index) {
+        radiusIndex = index;
+        config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0).set(radiusIndex);
+        config.save();
+    }
+
+    public static int getRadius() {
+        return radiuses[radiusIndex];
     }
 
     public static void addBlock(String name, Ident ident, int color) {
