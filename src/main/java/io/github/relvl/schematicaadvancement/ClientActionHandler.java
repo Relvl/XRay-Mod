@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.github.relvl.schematicaadvancement.client.gui.GuiClampSlider;
 import io.github.relvl.schematicaadvancement.client.gui.GuiScreenBlockEdit;
 import io.github.relvl.schematicaadvancement.client.gui.GuiSlider;
 import io.github.relvl.schematicaadvancement.config.ConfigHandler;
@@ -23,11 +24,15 @@ public class ClientActionHandler {
     }
 
     public enum Action {
-        DISTANCE_CHANGED("", event -> {
+        XRAY_DIST_CHANGED("", event -> {
             GuiSlider slider = (GuiSlider)event.button;
-            ConfigHandler.setRadiusIndex(slider.sliderValue);
+            ConfigHandler.setRadiusIndex(slider.getValue());
         }),
-        ADD_BLOCK("Add new block", event -> {
+        XRAY_CLAMP_CHANGED("Limits the X-Ray search Y coords\nto the specified range", event -> {
+            ConfigHandler.setLowHeight(((GuiClampSlider)event.button).getValue());
+            ConfigHandler.setHighHeight(((GuiClampSlider)event.button).getHighValue());
+        }),
+        XRAY_ADD_BLOCK("Add new block", event -> {
             Minecraft.getMinecraft().displayGuiScreen(new GuiScreenBlockEdit());
         }),
         XRAY_SWITCH("Enables or disables X-Ray function", event -> {

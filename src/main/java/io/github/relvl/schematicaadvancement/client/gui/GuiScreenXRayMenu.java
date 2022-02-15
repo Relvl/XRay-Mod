@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings({"ParameterNameDiffersFromOverriddenParameter", "ClassHasNoToStringMethod"})
 public class GuiScreenXRayMenu extends GuiScreen {
-    private static final int PAGE_SIZE = 14;
+    private static final int PAGE_SIZE = 16;
 
     private final Map<Integer, GuiBlockButton> oreButtons = new HashMap<>();
 
@@ -28,8 +28,12 @@ public class GuiScreenXRayMenu extends GuiScreen {
         getScreenButtons().clear();
         oreButtons.clear();
 
-        int x = width / 2 - 100;
-        int y = height / 2 - 100;
+        int texWidth = 218;
+        int texHeigh = 193;
+
+        int btnWidth = (texWidth - 6) / 2;
+        int x = width / 2 - btnWidth + 4;
+        int y = height / 2 - ((texHeigh - 8) / 2) + 4;
 
         int offsetFrom = PAGE_SIZE * pageCurrent;
         int offsetTo = Math.min(PAGE_SIZE * pageCurrent + PAGE_SIZE, ConfigHandler.blocks.size());
@@ -40,7 +44,7 @@ public class GuiScreenXRayMenu extends GuiScreen {
         int col = 0;
         int id = 1000;
         for (BlockInfo ore : pageList) {
-            GuiBlockButton button = new GuiBlockButton(id, ore, x + col * 100, y + row * 20);
+            GuiBlockButton button = new GuiBlockButton(id, ore, x + col * (btnWidth - 5), y + row * 21);
             oreButtons.put(id, button);
             getScreenButtons().add(button);
             row++;
@@ -51,31 +55,54 @@ public class GuiScreenXRayMenu extends GuiScreen {
             id++;
         }
 
-        int texWidth = 218;
-
         getScreenButtons().add(new GuiButton(ClientActionHandler.Action.XRAY_SWITCH.getId(),
             width / 2 - texWidth / 2 - 30,
-            height / 2 - 80,
+            height / 2 - texHeigh / 2 + 8,
             30,
             20,
             ConfigHandler.globalEnabled ? ModInstance.mcFormat("ON", "a") : ModInstance.mcFormat("OFF", "7")
         ));
-        getScreenButtons().add(new GuiButton(ClientActionHandler.Action.ADD_BLOCK.getId(), width / 2 - texWidth / 2 - 30, height / 2 - 100, 30, 20, "+"));
+        getScreenButtons().add(new GuiButton(ClientActionHandler.Action.XRAY_ADD_BLOCK.getId(),
+            width / 2 - texWidth / 2 - 30,
+            height / 2 - texHeigh / 2 + 29,
+            30,
+            20,
+            "+"
+        ));
+
+        int pageButtonsY = height / 2 - texWidth / 2 + 21 * PAGE_SIZE / 2;
+        GuiButton aPrevButton;
+        getScreenButtons().add(aPrevButton = new GuiButton(-151,
+            width / 2 - texWidth / 2 - 30,
+            pageButtonsY,
+            30, 20, "<"
+        ));
 
         GuiButton aNextButton;
-        GuiButton aPrevButton;
+        getScreenButtons().add(aNextButton = new GuiButton(-150,
+            width / 2 + texWidth / 2 - 2,
+            pageButtonsY,
+            30, 20, ">"
+        ));
 
-        getScreenButtons().add(aPrevButton = new GuiButton(-151, width / 2 - texWidth / 2 - 30, height / 2 + 52, 30, 20, "<"));
-        getScreenButtons().add(aNextButton = new GuiButton(-150, width / 2 + texWidth / 2 + 6, height / 2 + 52, 30, 20, ">"));
-
-        getScreenButtons().add(new GuiSlider(ClientActionHandler.Action.DISTANCE_CHANGED.getId(),
-            width / 2 - 105,
-            height / 2 + 80,
-            texWidth - 2,
+        getScreenButtons().add(new GuiSlider(ClientActionHandler.Action.XRAY_DIST_CHANGED.getId(),
+            width / 2 - texWidth / 2 + 4,
+            height / 2 + texHeigh / 2,
+            texWidth - 9,
             "Distance",
             ConfigHandler.getRadiusIndex(),
             7,
             dis -> String.valueOf(ConfigHandler.getRadius())
+        ));
+
+        getScreenButtons().add(new GuiClampSlider(ClientActionHandler.Action.XRAY_CLAMP_CHANGED.getId(),
+            width / 2 - texWidth / 2 + 4,
+            height / 2 + texHeigh / 2 + 20,
+            texWidth - 9,
+            "Clamp",
+            ConfigHandler.getLowHeight(),
+            ConfigHandler.getHighHeight(),
+            255
         ));
 
         if (ConfigHandler.blocks.size() <= PAGE_SIZE) {
@@ -149,9 +176,12 @@ public class GuiScreenXRayMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float f) {
+        int texWidth = 218;
+        int texHeigh = 193;
+
         drawDefaultBackground();
         mc.renderEngine.bindTexture(new ResourceLocation("schematicaadvancement:textures/gui/Background.png"));
-        drawTexturedQuadFit(width / 2 - 110, height / 2 - 110, 229, 193, 0);
+        drawTexturedQuadFit(width / 2 - texWidth / 2, height / 2 - texHeigh / 2, texWidth, texHeigh, 0);
         super.drawScreen(x, y, f);
 
         for (GuiButton button : getScreenButtons()) {
@@ -170,7 +200,7 @@ public class GuiScreenXRayMenu extends GuiScreen {
 
                         ClientActionHandler.Action action = ClientActionHandler.Action.of(button.id);
                         if (action != null && !action.getTooltip().isEmpty()) {
-                            this.func_146283_a(Arrays.asList(action.getTooltip()), x, y);
+                            this.func_146283_a(Arrays.asList(action.getTooltip().split("\n")), x + 10, y + 20);
                         }
                     }
                 }

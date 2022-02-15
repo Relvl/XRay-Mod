@@ -13,6 +13,8 @@ public class ConfigHandler {
     private static final int[] radiuses = {8, 16, 32, 48, 64, 80, 128, 256};
     private static int radiusIndex;
     private static Configuration config;
+    private static int lowHeight = 0;
+    private static int highHeight = 256;
 
     public static final List<BlockInfo> blocks = new ArrayList<>();
     public static boolean globalEnabled;
@@ -26,6 +28,8 @@ public class ConfigHandler {
         }
 
         radiusIndex = config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0).getInt();
+        lowHeight = config.get(Configuration.CATEGORY_GENERAL, "lowHeight", 0).getInt();
+        highHeight = config.get(Configuration.CATEGORY_GENERAL, "highHeight", 256).getInt();
 
         for (String category : config.getCategoryNames()) {
             ConfigCategory cat = config.getCategory(category);
@@ -49,23 +53,6 @@ public class ConfigHandler {
         config.save();
     }
 
-    public static void changeDistance(int step) {
-        if (step > 0) {
-            radiusIndex++;
-            if (radiusIndex >= radiuses.length) {
-                radiusIndex = 0;
-            }
-        }
-        else {
-            radiusIndex--;
-            if (radiusIndex < 0) {
-                radiusIndex = radiuses.length - 1;
-            }
-        }
-        config.get(Configuration.CATEGORY_GENERAL, "radiusIdx", 0).set(radiusIndex);
-        config.save();
-    }
-
     public static int getRadiusIndex() {
         return radiusIndex;
     }
@@ -78,6 +65,26 @@ public class ConfigHandler {
 
     public static int getRadius() {
         return radiuses[radiusIndex];
+    }
+
+    public static int getLowHeight() {
+        return lowHeight;
+    }
+
+    public static void setLowHeight(int height) {
+        lowHeight = height;
+        config.get(Configuration.CATEGORY_GENERAL, "lowHeight", 0).set(lowHeight);
+        config.save();
+    }
+
+    public static int getHighHeight() {
+        return highHeight;
+    }
+
+    public static void setHighHeight(int height) {
+        highHeight = height;
+        config.get(Configuration.CATEGORY_GENERAL, "highHeight", 0).set(highHeight);
+        config.save();
     }
 
     public static void addBlock(String name, Ident ident, int color) {

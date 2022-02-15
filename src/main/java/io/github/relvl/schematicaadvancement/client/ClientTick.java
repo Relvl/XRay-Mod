@@ -54,7 +54,7 @@ public class ClientTick implements Runnable {
                     int px = localPlyX;
                     int py = localPlyY;
                     int pz = localPlyZ;
-                    for (int y = Math.max(0, py - 96); y < py + 32; y++) {
+                    for (int y = ConfigHandler.getLowHeight(); y <= ConfigHandler.getHighHeight(); y++) {
                         for (int x = px - radius; x < px + radius; x++) {
                             for (int z = pz - radius; z < pz + radius; z++) {
                                 int id = Block.getIdFromBlock(mc.theWorld.getBlock(x, y, z));

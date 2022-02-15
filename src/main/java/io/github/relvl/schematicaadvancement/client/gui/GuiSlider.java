@@ -11,19 +11,18 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 public class GuiSlider extends GuiButton {
-    private final String label;
-
-    public int sliderValue;
-    private final int sliderMaxValue;
-
-    private boolean dragging;
     private final Function<Integer, String> valueTransformator;
+    private final int maxValue;
 
-    public GuiSlider(int id, int x, int y, int width, String label, int startingValue, int maxValue, Function<Integer, String> valueTransformator) {
+    protected final String label;
+    protected int value;
+    protected boolean dragging;
+
+    public GuiSlider(int id, int x, int y, int width, String label, int value, int maxValue, Function<Integer, String> valueTransformator) {
         super(id, x, y, width, 20, label);
         this.label = label;
-        this.sliderValue = startingValue;
-        this.sliderMaxValue = maxValue;
+        this.value = value;
+        this.maxValue = maxValue;
         this.valueTransformator = valueTransformator;
     }
 
@@ -32,56 +31,76 @@ public class GuiSlider extends GuiButton {
         return 0;
     }
 
-    /** Actually its a render method... */
+    /** Actually it's a render method... */
     @Override
     protected void mouseDragged(Minecraft mc, int x, int y) {
-        float position = (float)this.sliderValue / this.sliderMaxValue;
-        if (this.dragging) {
-            position = (x - (this.xPosition + 4 - ((float)this.width / this.sliderMaxValue) / 2.0f)) / (this.width - 8);
+        int oldValue = value;
+        value = moveTip(dragging, x, oldValue);
+        this.displayString = label + ": " + valueTransformator.apply(value);
+        drawTip(value, x, y);
+        if (value != oldValue) {
+            MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.ActionPerformedEvent.Post(mc.currentScreen, this, Collections.emptyList()));
+        }
+    }
+
+    protected void drawTip(int value, int x, int y) {
+        float color = isMouseOver(value, x, y) ? 1.0f : 0.75f;
+        GL11.glColor4f(color, color, color, 1.0F);
+        drawTexturedModalRect(xPosition + (int)(((float)value / maxValue) * (width - 8)), yPosition, 0, 66, 4, 20);
+        drawTexturedModalRect(xPosition + (int)(((float)value / maxValue) * (width - 8)) + 4, yPosition, 196, 66, 4, 20);
+    }
+
+    protected int moveTip(boolean dragging, int x, int oldValue) {
+        if (dragging) {
+            float position = (x - (xPosition + 4 - ((float)width / maxValue) / 2.0f)) / (width - 8);
             if (position < 0.0F) {
                 position = 0.0F;
             }
             if (position > 1.0F) {
                 position = 1.0F;
             }
-            int oldValue = this.sliderValue;
-            this.sliderValue = (int)(position * sliderMaxValue);
-            if (this.sliderValue != oldValue) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.ActionPerformedEvent.Post(mc.currentScreen, this, Collections.emptyList()));
-            }
-            position = (float)this.sliderValue / this.sliderMaxValue;
+            return (int)(position * maxValue);
         }
-
-        this.displayString = label + ": " + valueTransformator.apply((int)(position * sliderMaxValue));
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.drawTexturedModalRect(this.xPosition + (int)(position * (this.width - 8)), this.yPosition, 0, 66, 4, 20);
-        this.drawTexturedModalRect(this.xPosition + (int)(position * (this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+        return oldValue;
     }
 
     @Override
     public boolean mousePressed(Minecraft mc, int x, int y) {
-        if (super.mousePressed(mc, x, y)) {
-            float position = (x - (this.xPosition + 4)) / (float)(this.width - 8);
-            if (position < 0.0F) {
-                position = 0.0F;
-            }
-            if (position > 1.0F) {
-                position = 1.0F;
-            }
-            this.sliderValue = (int)(position * sliderMaxValue);
-            MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.ActionPerformedEvent.Post(mc.currentScreen, this, Collections.emptyList()));
-
-            this.dragging = true;
-            return true;
-        }
-        else {
+        if (!super.mousePressed(mc, x, y)) {
             return false;
         }
+        return hasMousePressed(mc, x, y);
+    }
+
+    protected boolean hasMousePressed(Minecraft mc, int x, int y) {
+        float position = (x - (this.xPosition + 4)) / (float)(this.width - 8);
+        if (position < 0.0F) {
+            position = 0.0F;
+        }
+        if (position > 1.0F) {
+            position = 1.0F;
+        }
+        this.value = (int)(position * maxValue);
+        MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.ActionPerformedEvent.Post(mc.currentScreen, this, Collections.emptyList()));
+
+        this.dragging = true;
+        return true;
     }
 
     @Override
     public void mouseReleased(int par1, int par2) {
         this.dragging = false;
+    }
+
+    protected boolean isMouseOver(int value, int mouseX, int mouseY) {
+        if (mouseY < yPosition || mouseY > yPosition + height) {
+            return false;
+        }
+        int coord = xPosition + (int)((width - 8) * ((float)value / maxValue));
+        return mouseX >= coord && mouseX <= coord + 8;
+    }
+
+    public int getValue() {
+        return value;
     }
 }
