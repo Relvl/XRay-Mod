@@ -3,7 +3,7 @@ Minecraft Forge XRay mod for 1.7.10
 
 I WILL NOT port this mod to MC version 1.8+ until GTNH don't (never).
 
-Mod id and file name DO NOT CONTAINS 'xray' or 'cheat' words and sometimes will be changed.
+Mod id and file name DO NOT CONTAIN 'xray' or 'cheat' words and sometime will be changed.
 
 ## Features:
     - Awesome GUI
@@ -12,9 +12,9 @@ Mod id and file name DO NOT CONTAINS 'xray' or 'cheat' words and sometimes will 
     - Able to add/remove/edit ores/blocks
     - Color selector (RGB)
     - Hotkeys to enable/disable options
+    - Can limit height of blocks searching
     
 ## Todo:
-    - Change clamp of min and max Y for searching
     - Add entity detection
     - Add dropped item detection
     - Add GT ores detection
