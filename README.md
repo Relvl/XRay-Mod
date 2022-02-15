@@ -13,6 +13,11 @@ Mod id and file name DO NOT CONTAIN 'xray' or 'cheat' words and sometime will be
     - Color selector (RGB)
     - Hotkeys to enable/disable options
     - Can limit height of blocks searching
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/4003026/154060596-d7078d2a-8c50-4f83-8df4-2f353b312ddb.png)
+![image](https://user-images.githubusercontent.com/4003026/154060841-21fbdb89-3bf4-4eb9-b8f2-6eb5743c16af.png)
+
     
 ## Todo:
     - Add entity detection
