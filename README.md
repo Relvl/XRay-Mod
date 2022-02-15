@@ -14,6 +14,10 @@ Mod id and file name DO NOT CONTAIN 'xray' or 'cheat' words and sometime will be
     - Hotkeys to enable/disable options
     - Can limit height of blocks searching
 
+Tested with:
+ - Vanilla Minecraft 1.7.10 with Forge
+ - GT: New Horizins modpack
+ 
 <details>
     <summary>Screenshots</summary>
     
@@ -28,13 +32,9 @@ Mod id and file name DO NOT CONTAIN 'xray' or 'cheat' words and sometime will be
     - Add GT ores detection
     - Add fast commands menu
 
-Tested with:
- - Vanilla Minecraft 1.7.10 with Forge
- - GT: New Horizins modpack
+## License
+Licensed under the [DBaJ (Don't Be a Jerk) non-commercial care-free license](http://www.dbad-license.org/).
 
 The rendering is copied off of CJB's MoreInfo mod. Thanks CJB!
 
 The oroginal code is copied off from https://github.com/MichaelHillcox/XRay-Mod Thanks guys!
-
-## License
-Licensed under the [DBaJ (Don't Be a Jerk) non-commercial care-free license](http://www.dbad-license.org/).
