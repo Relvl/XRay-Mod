@@ -1,26 +1,32 @@
-## Fgt X-Ray
-Minecraft Forge XRay mod
+## Minecraft advanced X-Ray cheat
+Minecraft Forge XRay mod for 1.7.10
 
-## Feature:
-    - Works with Forge
+I WILL NOT port this mod to MC version 1.8+ until GTNH don't (never).
+
+Mod id and file name DO NOT CONTAINS 'xray' or 'cheat' words and sometimes will be changed.
+
+## Features:
     - Awesome GUI
-    - Able to add new ores/blocks
-    - Color selector ( RGB )
-
-Working on: Minecraft 1.7.10 and Forge 10.13.2.1291
+    - Customizable search radius
+    - Fancy detection render
+    - Able to add/remove/edit ores/blocks
+    - Color selector (RGB)
+    - Hotkeys to enable/disable options
+    
+## Todo:
+    - Change clamp of min and max Y for searching
+    - Add entity detection
+    - Add dropped item detection
+    - Add GT ores detection
+    - Add fast commands menu
 
 Tested with:
+ - Vanilla Minecraft 1.7.10 with Forge
+ - GT: New Horizins modpack
 
- - Minecraft Forge 1.7.10
- - FTB: Direwolf20 modpack
+The rendering is copied off of CJB's MoreInfo mod. Thanks CJB!
 
-The rendering is copied off of CJB's MoreInfo mod. Thanks CJB.
-
-Contributors:
-
-[mcd1992](https://github.com/mcd1992)
-
-[AoKMiKeY](https://github.com/aokmikey)
+The oroginal code is copied off from https://github.com/MichaelHillcox/XRay-Mod Thanks guys!
 
 ## License
 Licensed under the [DBaJ (Don't Be a Jerk) non-commercial care-free license](http://www.dbad-license.org/).
