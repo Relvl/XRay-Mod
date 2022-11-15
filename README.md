@@ -32,6 +32,13 @@ Tested with:
     - Add GT ores detection
     - Add fast commands menu
 
+## Gradle build
+    If you dont have cached mc files (that was removed from the amazon) read this (russian): https://forum.mcmodding.ru/resources/fajly-dlja-forgegradle.300/
+1. Run graddle task `setupDecompWorkspace`
+2. Update graddle project
+3. Create directory `eclipse` if needed
+4. Run `minecraft client` debugging
+
 ## License
 Licensed under the [DBaJ (Don't Be a Jerk) non-commercial care-free license](http://www.dbad-license.org/).
 

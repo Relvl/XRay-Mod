@@ -19,7 +19,6 @@ public class DefaultConfig {
         add(new BlockInfo(Blocks.iron_ore, 0xAA7525, false));
         add(new BlockInfo(Blocks.quartz_ore, 0x8888FF, false));
         add(new BlockInfo(Blocks.coal_ore, 0x000000, false));
-        add(new BlockInfo(Blocks.redstone_wire, 0xFF0000, false));
         add(new BlockInfo(Blocks.chest, 0xFF00FF, true));
     }};
 

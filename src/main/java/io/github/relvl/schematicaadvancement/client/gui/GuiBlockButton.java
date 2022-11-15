@@ -45,7 +45,7 @@ public class GuiBlockButton extends GuiButton {
     public void drawButton(Minecraft mc, int x, int y) {
         super.drawButton(mc, x, y);
         ItemStack is = info.getIdent().getItemStack();
-        if (is != null) {
+        if (is != null && is.getItem() != null) {
             int padding = (height - 16) / 2;
             RenderHelper.enableGUIStandardItemLighting();
             drawItems.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, is, xPosition + padding, yPosition + padding);
