@@ -1,29 +1,20 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-        maven {
-            name = "maven"
-            url = "https://repo1.maven.org/maven2"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+  repositories {
+    mavenCentral()
+    maven { url = "https://files.minecraftforge.net/maven" }
+    maven { url = "https://repo1.maven.org/maven2" }
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+  }
+  dependencies {
+    classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+  }
 }
 
 repositories {
-    maven {
-        name = "maven"
-        url = "https://repo1.maven.org/maven2"
-    }
+  maven { url = "https://repo1.maven.org/maven2" }
+  maven { url = "https://gregtech.overminddl1.com/" }
+  maven { url = "http://jenkins.usrv.eu:8081/nexus/content/groups/public/" }
+  maven { url = "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases" }
 }
 
 apply plugin: 'forge'
@@ -31,29 +22,39 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group = "io.github.relvl"
-version = "1.0.2"
+version = "1.0.3"
 archivesBaseName = "schematica-advancement-1.7.10"
 
 minecraft {
-    version = "1.7.10-10.13.4.1558-1.7.10"
-    runDir = "eclipse"
+  version = "1.7.10-10.13.4.1558-1.7.10"
+  runDir = "eclipse"
+}
+
+dependencies {
+  // this mod ONLY for confortable testing and do not required in any case
+  compile('com.github.GTNewHorizons:StructureLib:1.2.0-beta.2:dev')
+  compile('com.github.GTNewHorizons:GT5-Unofficial:5.09.40.17:dev')
+  compile('net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev')
+  compile('com.github.GTNewHorizons:WAWLA:1.1.3-GTNH:dev')
+  compile('com.github.GTNewHorizons:WAILAPlugins:0.2.5:dev')
+  compile('com.github.GTNewHorizons:waila:1.5.22:dev')
 }
 
 processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+  // this will ensure that this task is redone when the versions change.
+  inputs.property "version", project.version
+  inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+  // replace stuff in mcmod.info, nothing else
+  from(sourceSets.main.resources.srcDirs) {
+    include 'mcmod.info'
 
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
+    // replace version and mcversion
+    expand 'version': project.version, 'mcversion': project.minecraft.version
+  }
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+  // copy everything else, thats not the mcmod.info
+  from(sourceSets.main.resources.srcDirs) {
+    exclude 'mcmod.info'
+  }
 }

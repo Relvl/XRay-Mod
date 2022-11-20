@@ -101,15 +101,10 @@ public class ConfigHandler {
 
     public static void update(BlockInfo info) {
         String categoryName = "blocks." + info.getIdent().getIdentPair();
-        for (String category : config.getCategoryNames()) {
-            if (category.startsWith("blocks.")) {
-                config.get(categoryName, "name", "").set(info.name);
-                config.get(categoryName, "color", -1).set(info.color);
-                config.get(categoryName, "enabled", false).set(info.enabled);
-                config.save();
-                break;
-            }
-        }
+        config.get(categoryName, "name", "").set(info.name);
+        config.get(categoryName, "color", -1).set(info.color);
+        config.get(categoryName, "enabled", false).set(info.enabled);
+        config.save();
     }
 
     public static void remove(BlockInfo info) {
